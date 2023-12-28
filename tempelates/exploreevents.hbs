@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Events</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center; 
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        
+        .event-box {
+            flex-basis: calc(33.33% - 20px); 
+            margin: 10px; 
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s; 
+        }
+
+        
+        .event-box:hover {
+            background-color: #e0e0e0;
+        }
+
+        
+        .event-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+<script>
+        function fetchAndDisplayEvents(eventType) {
+            return fetch(`http://localhost:4001/events/${eventType}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    return data;
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    throw error;
+                });
+        }
+
+        function eventBoxClicked(eventType) {
+            fetchAndDisplayEvents(eventType)
+                .then(data => {
+                    const jsonString = JSON.stringify(data);
+                    // Encode the string for safe URL transmission
+                    const encodedData = encodeURIComponent(jsonString);
+
+                    // Redirect to the next page with the encoded data as a query parameter
+                    window.location.href = `/explore/details?data=${encodedData}`;
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+
+</head>
+<body>
+    <div id="dataContainer"></div>
+    <div class="container">
+        
+        <div class="event-box" onclick="eventBoxClicked('Yearly Events')">
+            <div class="event-icon">&#128197;</div>
+            <div class="event-text">Yearly Events</div>
+        </div>
+
+
+        <!-- Department Events -->
+        <div class="event-box" onclick="eventBoxClicked('Department Events')">
+            <div class="event-icon">&#127891;</div>
+            <div class="event-text">Department Events</div>
+        </div>
+
+        <!-- Clubs Events -->
+        <div class="event-box" onclick="eventBoxClicked('Clubs Events')">
+            <div class="event-icon">&#127867;</div>
+            <div class="event-text">Clubs Events</div>
+        </div>
+
+        <!-- Tech Talks -->
+        <div class="event-box" onclick="eventBoxClicked('Tech Talks')">
+            <div class="event-icon">&#128187;</div>
+            <div class="event-text">Tech Talks</div>
+        </div>
+
+        <!-- Spot Events -->
+        <div class="event-box" onclick="eventBoxClicked('Sport Events')">
+            <div class="event-icon">&#127937;</div>
+            <div class="event-text">Spot Events</div>
+        </div>
+
+        <!-- Movie Promotions -->
+        <div class="event-box" onclick="eventBoxClicked('Movie Promotions')">
+            <div class="event-icon">&#127867;</div>
+            <div class="event-text">Movie Promotions</div>
+        </div>
+
+        <!-- Past Events -->
+        <div class="event-box" onclick="eventBoxClicked('Past Eventss')">
+            <div class="event-icon">&#127871;</div>
+            <div class="event-text">Past Events</div>
+        </div>
+    </div>
+</body>
+</html>

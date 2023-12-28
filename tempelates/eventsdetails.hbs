@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Event Details</title>
+    <style>
+        /* Add your CSS styles here */
+
+        .event-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .event-card button {
+            margin-top: 10px;
+        }
+
+        .event-details {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .event-details p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Details</h1>
+
+    <!-- Container for event cards -->
+    <div id="cardContainer"></div>
+
+    <script>
+        // Extract the encoded data from the query parameter
+        const queryParams = new URLSearchParams(window.location.search);
+        const encodedData = queryParams.get('data');
+
+        // Decode the data and parse it as JSON
+        const jsonString = decodeURIComponent(encodedData);
+        const eventData = JSON.parse(jsonString);
+
+        // Function to create and display cards
+        function displayEventCards() {
+            const container = document.getElementById('cardContainer');
+
+            // Loop through each event in the data and create a card
+            eventData.forEach(event => {
+                const card = document.createElement('div');
+                card.classList.add('event-card');
+                card.innerHTML = `
+                <div    style=" background-image: url('${event.poster}');
+                                background-size: cover; 
+                                background-position: center; 
+                                color: #ffffff; 
+        
+                                height:600px
+                                ">
+                    {{!-- <img src="${event.poster}" alt="${event.eventName}"> --}}
+                    <h2>${event.eventName}</h2>
+                    <p>Event Type: ${event.eventType}</p>
+                    <!-- Add other properties as needed -->
+
+                    <button onclick="toggleEventDetails('${event._id}')">Print Event Data</button>
+                    <div class="event-details" id="${event._id}Details">
+                        <p>Event Date: ${new Date(event.eventDate).toLocaleDateString()}</p>
+                        <p>Participants : ${event.participateCommon}</p>
+                        <p>Contact Email : ${event.contactEmail}</p>
+                        <p>HOD Contact : ${event.contactNumberHOD}</p>
+                        <p>Intitution Name : ${event.institutionName}</p>
+                        <p>Website : ${event.collegeWebsite}</p>
+                        
+                        
+                    </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Function to toggle the visibility of event details
+        function toggleEventDetails(eventId) {
+            const detailsDiv = document.getElementById(`${eventId}Details`);
+            detailsDiv.style.display = detailsDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Call the displayEventCards function when the page loads
+        window.onload = displayEventCards;
+    </script>
+</body>
+</html>

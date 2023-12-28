@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management System Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGxvZ2lufGVufDB8fDB8fHww');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.5s ease; 
+        }
+        .login-container {
+            max-width: 400px;
+            padding: 35px;
+            background-color: rgba(255, 255, 255, 0.85); 
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: background-color 0.5s ease; 
+            position: absolute;
+            top: 10px;
+        }
+
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 10px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 20px;
+            border: 2px solid #eebbe8;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #555;
+            transition: border-color 0.3s ease; /* Add border color transition */
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff; /* Change border color on focus */
+        }
+
+        button {
+            background-color: #fe83dd;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease; /* Add button background color transition */
+        }
+
+        button:hover {
+            background-color: #000000;
+        }
+
+        /* Stylish forgot password button */
+        .forgot-password {
+            margin-top: 15px;
+        }
+
+        .forgot-password a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease; /* Add link color transition */
+        }
+
+        .forgot-password a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="login-form"  action="/login" method="POST" autocomplete="off">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        
+            <button type="submit">Login</button>
+        
+            <!-- Forgot Password Link -->
+            <div class="forgot-password">
+                <a href="forgot_password.php">Forgot Password?</a>
+            </div>
+        </form>
+        
+    </div>
+     <!-- Add this script section just before </body> tag -->
+
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Event Management System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            background: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        header {
+            color: hsl(0, 0%, 100%);
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-image: url('data:image/png;base64,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');
+            background-size: contain;
+            background-position: inherit;
+        
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        /* Add this CSS to your existing styles */
+
+/* Contact Us Button */
+        .contact-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff5733;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 100; /* Ensure it's above other content */
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .call-symbol {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .contact-button:hover {
+            background-color: #ff7f51;
+            transform: scale(1.05);
+        }
+
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+        }
+
+        nav li {
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ff5733;
+        }
+
+        /* Positioning for Sign Up and Login buttons */
+        .header-buttons {
+            position: absolute;
+            top: 30px;
+            right: 20px;
+        }
+
+        .button {
+            background-color: #007acc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #005a9c;
+            transform: scale(1.05);
+        }
+
+        .button-primary {
+            background-color: #ff5733;
+        }
+
+        .button-primary:hover {
+            background-color: #ff7f51;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            border-style: groove;
+            animation: fadeIn 1s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 0;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #000;
+        }
+
+        /* Section Styles */
+        #about {
+            background-color: #f2f2f2;
+            padding: 40px;
+        }
+
+        #services {
+            background-image: url('C:\\Users\\brahm\\OneDrive\\Desktop\\html-css2\\e3.jpg'); /* Use an appropriate background image */
+            background-size: cover;
+            color: #fff;
+            padding: 40px;
+        }
+
+        #contact {
+            background-color: #e8e8e8;
+            padding: 40px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>College Event Management</h1>
+            <div class="logo"></div>
+        </div>
+
+        
+
+        <!-- Sign Up and Login buttons in the top right corner -->
+        <div class="header-buttons">
+            <a href="/login" class="button">Login</a>
+        </div>
+    </header>
+
+    <div class="container" id="about">
+        <h2>Vasireddy Venkatadri Institute of Technology</h2>
+        <p>
+            Welcome to College Event Management. At Vasireddy Venkatadri Institute of Technology, we make event planning effortless. Our platform simplifies registration, ticketing, and communication, ensuring engaging and memorable events. Join us to elevate your event management experience today!
+        </p>
+
+        <div class="button-container">
+            <a href="/about" class="button">About Us</a>
+            <a href="/explore" class="button">Explore Events</a>
+        </div>
+    </div>
+    <div class="contact-button">
+        <a href="/contact">
+            <div class="call-symbol">&#9742;</div>
+            Contact Us
+        </a>
+    </div>  
+</body>
+</html>

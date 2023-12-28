@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+    <script src="server.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #ffffff;
+            background-color: #628f95;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        form {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #efcff8;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        select,
+        input[type="text"],
+        input[type="date"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #61a0a8;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #4b7c82;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Event Details</h1>
+
+    <form method="POST" action="/events">
+        <label for="eventName">Event Name:</label>
+        <input type="text" id="eventName" autocomplete="off" name="eventName" required>
+
+        <label for="eventType">Event Type:</label>
+        <select id="eventType" name="eventType" required>
+            <option value="Yearly Events">Yearly Events</option>
+            <option value="Department Events">Department Events</option>
+            <option value="Sport Events">Sport Events</option>
+            <option value="Clubs Events">Clubs Events</option>
+            <option value="Tech Talks">Tech Talks</option>
+            <option value="Movie Promotions">Movie Promotions</option>
+            <option value="Past Events">Past Events</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <div class="date-group">
+            <label for="eventFromDate">Event Start Date:</label>
+            <input type="date" id="eventFromDate" name="eventFromDate" required>
+
+            <label for="eventToDate">Event End Date:</label>
+            <input type="date" id="eventToDate" name="eventToDate" required>
+        </div>
+
+        <div class="date-group">
+            <label for="registrationStartDate">Registration Start Date:</label>
+            <input type="date" id="registrationStartDate" name="registrationStartDate" required>
+
+            <label for="registrationEndDate">Registration End Date:</label>
+            <input type="date" id="registrationEndDate" name="registrationEndDate" required>
+        </div>
+
+        <h2 style="color: #333; font-size: 18px;">Who Can Participate?</h2>
+        <select id="participateGroup" name="participateGroup" required>
+            <option value="Common For All">Common For All</option>
+            <option value="IT">IT</option>
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Civil">Civil</option>
+            <option value="AIDS">AIDS</option>
+            <option value="CSM">CSM</option>
+            <option value="CIC">CIC</option>
+            <option value="CSO">CSO</option>
+        </select>
+
+        <div class="contact-details-group">
+            <h2 style="color: #333; font-size: 18px;">Event Contact Details</h2>
+
+            <label for="contactEmail">Contact Email (Official):</label>
+            <input type="email" id="contactEmail" name="contactEmail" required>
+
+            <label for="contactNumberHOD">Contact Number 1 [HOD]:</label>
+            <input type="tel" id="contactNumberHOD" name="contactNumberHOD" required>
+
+            <label for="contactNumberCoordinator">Contact Number 2 [STUDENT COORDINATOR]:</label>
+            <input type="tel" id="contactNumberCoordinator" name="contactNumberCoordinator" required>
+        </div>
+
+        <div class="contact-details-group">
+            <h2 style="color: #333; font-size: 18px;">Details of the Person Submitting the Event</h2>
+
+            <label for="yourName">Your Name [Public Display]:</label>
+            <input type="text" id="yourName" name="yourName" required>
+
+            <label for="yourEmail">Your Email [Private]:</label>
+            <input type="email" id="yourEmail" name="yourEmail" required>
+
+            <label for="yourPhone">Your Phone [Private]:</label>
+            <input type="tel" id="yourPhone" name="yourPhone" required>
+        </div>
+
+        <label for="eventLocation">Event Location:</label>
+        <input type="text" id="eventLocation" name="eventLocation" required>
+
+        <label for="institutionName">Institution Name [College Name]:</label>
+        <input type="text" id="institutionName" name="institutionName" required>
+
+        <label for="collegeWebsite">College Website:</label>
+        <input type="text" id="collegeWebsite" name="collegeWebsite" required>
+
+        <label for="poster">Event Poster Link:</label>
+        <input type="text" id="collegeWebsite" name="poster" required>
+
+        <br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+
+</html>
