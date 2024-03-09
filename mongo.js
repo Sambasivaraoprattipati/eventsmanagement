@@ -12,23 +12,26 @@ mongoose
     console.error('Failed to connect to MongoDB:', error);
   });
 
-const eventSchema = new mongoose.Schema({
-  eventName: String,
-  eventType: String,
-  eventFromDate: Date,
-  eventToDate: Date,
-  registrationStartDate: Date,
-  registrationEndDate: Date,
-  participateCommon: String,
-  yourName: String,
-  yourEmail: String,
-  contactEmail: String,
-  contactNumberHOD: String,
-  institutionName: String,
-  collegeWebsite: String,
-  poster : String,
-
-});
+  const eventSchema = new mongoose.Schema({
+    eventName: String,
+    eventType: String,
+    eventFromDate: Date,
+    eventToDate: Date,
+    registrationStartDate: Date,
+    registrationEndDate: Date,
+    participateGroup: String,
+    contactemail: String,
+    contactHOD: String,
+    contactCoordinator: String,
+    eventby: String,
+    Emailofcreator: String,
+    contactcreator: String,
+    institutionName: String,
+    collegeWebsite: String,
+    poster: String,
+    eventdescription: String,
+  });
+  
 
 
 
