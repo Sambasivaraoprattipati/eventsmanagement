@@ -30,6 +30,18 @@ mongoose
     collegeWebsite: String,
     poster: String,
     eventdescription: String,
+    count: Number,
+    registrations:[
+      {
+        name: { type: String, required: true },
+        idNumber: { type: String, required: true },
+        email: { type: String, required: true },
+        phoneNumber: { type: String, required: true },
+        college: { type: String, required: true },
+        branch: { type: String, required: true },
+        yearOfStudy: { type: Number, required: true },
+      },
+    ],
   });
   
 

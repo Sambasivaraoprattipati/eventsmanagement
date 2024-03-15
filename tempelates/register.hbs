@@ -18,11 +18,11 @@
 
         form {
             background-color: #fff;
-            padding: 40px; /* Increased padding for a larger form */
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%; /* Set the width of the form */
-            max-width: 400px; /* Set a maximum width for smaller screens */
+            width: 80%;
+            max-width: 400px;
         }
 
         label {
@@ -49,7 +49,7 @@
 </head>
 <body>
 
-    <form id="registrationForm" method="POST" action="/registersend">
+    <form id="registrationForm" method="POST" >
         <h2>Event Registration</h2>
 
         <label for="name">Name:</label>
@@ -78,39 +78,46 @@
             <option value="4">4th Year</option>
         </select>
 
-        <button type="Submit" value="Submit">Submit</button>
+        <button type="button" onclick="submitForm()">Submit</button>
     </form>
 
     <script>
         function submitForm() {
-            // You can add validation and additional processing here before submitting the form
-            // For simplicity, we'll just submit the form data to the console for now
             const formData = new FormData(document.getElementById('registrationForm'));
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
-            console.log(data);
 
-            // Here, you can use AJAX to send the form data to your backend for processing
-            // Example using Fetch API:
-            /*
-            fetch('/your-backend-endpoint', {
+            // Extract event ID from the URL
+            const eventId = window.location.pathname.split('/').pop();
+
+            // Sending the data to your backend API along with the event ID
+            fetch(`http://localhost:4001/registers/${eventId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Assuming your server sends JSON response
+                }
+                throw new Error('Network response was not ok.');
+            })
             .then(result => {
                 console.log('Success:', result);
+                window.location.href = '/explore';
+                // Optionally, you can display a success message to the user
             })
             .catch(error => {
                 console.error('Error:', error);
+                // Optionally, you can display an error message to the user
             });
-            */
         }
+
+
     </script>
 
 </body>

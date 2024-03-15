@@ -181,6 +181,11 @@
             padding: 40px;
         }
 
+         #event-cards-container{
+            overflow: hidden;
+        }
+        
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -193,104 +198,112 @@
             
         }
     </style>
-    </style>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    // Function to fetch events data from the backend
-    async function fetchEvents() {
-        try {
-            const response = await fetch('http://localhost:4001/eventdata');
-            const eventData = await response.json();
-            console.log(eventData);
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to fetch events data from the backend
+        async function fetchEvents() {
+            try {
+                const response = await fetch('http://localhost:4001/eventdata');
+                const eventData = await response.json();
+                console.log(eventData);
 
-            // Call the function to update the cards with the fetched data
-            updateEventCards(eventData);
+                // Call the function to update the cards with the fetched data
+                updateEventCards(eventData);
 
-            // Start the slideshow
-            startSlideShow();
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        }
-    }
-
-    // Function to update the cards with the fetched data
-    function updateEventCards(events) {
-        const cardsContainer = document.getElementById('event-cards-container');
-        const eventCards = document.createElement('div');
-        eventCards.classList.add('event-cards');
-
-        {{!-- eventCards.style.height = '300px'; 
-        eventCards.style.width = '100%';   
-        eventCards.style.padding = '10px';  --}}
-
-        // Set styling for cardsContainer
-        cardsContainer.style.height = '250px'; 
-        cardsContainer.style.width = '80%';    
-        cardsContainer.style.padding = '20px'; 
-
-        // Loop through the events and create cards
-        events.forEach(event => {
-            const card = document.createElement('div');
-            card.classList.add('event-card');
-            card.style.backgroundImage = url(${event.poster});
-
-            card.style.height = '230px';
-
-            const cardContent = document.createElement('div');
-            cardContent.classList.add('card-content');
-
-            cardContent.style.textAlign = 'left';
-
-            const eventName = document.createElement('h3');
-            eventName.textContent = Name: ${event.eventName};
-
-            const eventType = document.createElement('h3');
-            eventType.textContent = Type: ${event.eventType};
-
-            const eventDate = document.createElement('h3');
-            eventDate.textContent = Date: ${event.eventFromDate} to ${event.eventToDate};
-
-
-            cardContent.appendChild(eventName);
-            cardContent.appendChild(eventType);
-            cardContent.appendChild(eventDate);
-
-
-            // Add other data to the card as needed
-
-            cardContent.appendChild(eventName);
-            // Append other content as needed
-
-            card.appendChild(cardContent);
-            eventCards.appendChild(card);
-        });
-
-        cardsContainer.appendChild(eventCards);
-    }
-
-    // Start the automatic slideshow
-    function startSlideShow() {
-        const eventCardsContainer = document.querySelector('.event-cards');
-        let currentSlide = 0;
-
-        function showSlides() {
-            const slides = eventCardsContainer.children;
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
+                // Start the slideshow
+                startSlideShow();
+            } catch (error) {
+                console.error('Error fetching events:', error);
             }
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].style.display = "block";
         }
 
-        setInterval(showSlides, 4000); 
-    }
+        // Function to update the cards with the fetched data
+        function updateEventCards(events) {
+            const cardsContainer = document.getElementById('event-cards-container');
+            const eventCards = document.createElement('div');
+            eventCards.classList.add('event-cards');
 
-    // Fetch events when the page loads
-    fetchEvents();
-});
+            // Set styling for cardsContainer
+            cardsContainer.style.height = '250px';
+            cardsContainer.style.width = '80%';
+            cardsContainer.style.padding = '2px';
+            cardsContainer.style.display = 'flex';  // Add this line to use flexbox
 
-    </script>
+            // Loop through the events and create cards
+            events.forEach(event => {
+                const card = document.createElement('div');
+                card.classList.add('event-card');
+                card.style.height = '100%';
+                card.style.width = '900px';
+                card.style.display = 'flex';
+
+                const cardContent = document.createElement('div');
+                cardContent.classList.add('card-content');
+                cardContent.style.textAlign = 'left';
+                cardContent.style.height = '100%';
+                cardContent.style.width = '40%';  // Set left half width to 40%
+
+                const eventName = document.createElement('h3');
+                eventName.textContent = `Name: ${event.eventName}`;
+
+                const eventType = document.createElement('h3');
+                eventType.textContent = `Type: ${event.eventType}`;
+
+                const eventDate = document.createElement('h3');
+                eventDate.textContent = `Date: ${event.eventFromDate} to ${event.eventToDate}`;
+
+                cardContent.appendChild(eventName);
+                cardContent.appendChild(eventType);
+                cardContent.appendChild(eventDate);
+
+                // Create right half for image
+                const imageContainer = document.createElement('div');
+                imageContainer.style.width = '60%';
+                imageContainer.style.height = '100%';
+                imageContainer.style.backgroundSize = 'cover';  // Add this line for background cover
+                imageContainer.style.backgroundRepeat = 'no-repeat';  // Add this line for background repeat
+                imageContainer.style.backgroundImage = `url(${event.poster})`;
+
+                // Adjust these styles for better display
+                imageContainer.style.display = 'flex';
+                imageContainer.style.alignItems = 'center';
+                imageContainer.style.justifyContent = 'center';
+
+                // Append other content as needed
+                card.appendChild(cardContent);
+                card.appendChild(imageContainer);
+                eventCards.appendChild(card);
+            });
+
+            cardsContainer.appendChild(eventCards);
+        }
+
+        // Start the automatic slideshow
+        function startSlideShow() {
+            const eventCardsContainer = document.querySelector('.event-cards');
+            let currentSlide = 0;
+
+            function showSlides() {
+                const slides = eventCardsContainer.children;
+                for (let i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].style.display = "flex";
+            }
+
+            setInterval(showSlides, 2000);  // Set the interval to 4 seconds
+        }
+
+        // Fetch events when the page loads
+        fetchEvents();
+    });
+</script>
+
+
+
+
+
 </head>
 <body>
     <header>
@@ -318,6 +331,8 @@
             <a href="/explore" class="button">Explore Events</a>
         </div>
     </div>
+    <div id="event-cards-container" class="container"></div>
+
     <div class="contact-button">
         <a href="/contact">
             <div class="call-symbol">&#9742;</div>

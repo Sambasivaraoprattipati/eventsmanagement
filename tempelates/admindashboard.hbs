@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  left: -250px;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #333;
+  padding: 23px;
+  transition: left 0.3s ease;
+}
+
+.sidebar-open {
+  left: 0;
+}
+
+.sidebar h2 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: -10px;
+  right: 0px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 10px;
+}
+
+.sidebar ul li button {
+  display: block;
+  color: #fff;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul li button:hover {
+  background-color: #555;
+}
+
+/* Content Styles */
+.content {
+  margin-left: 300px;
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 40px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+.section h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.section:not(.active) {
+  display: none;
+}
+
+/* Button Content Styles */
+button {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #71bb65;
+}
+
+
+/* Updated CSS */
+.content a.button {
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Ensure button behaves like a block element */
+  border: 2px solid #4CAF50; /* Add border */
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: rgb(0, 0, 0);
+}
+
+.content a.button:hover {
+  background-color: #45a049;
+}
+
+/* Event Row Styles */
+.event-row {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+  display: flex; /* Use flexbox for card contents alignment */
+  align-items: center; /* Align items vertically */
+  justify-content: space-between; /* Align items horizontally */
+}
+
+.event-row h3 {
+  margin: 0;
+  flex: 1; /* Allow event name to grow and occupy available space */
+}
+
+.event-row p {
+  margin: 0;
+  text-align: center; /* Center the text */
+  flex: 10 auto; /* Prevent date from growing and keep fixed width */
+  width: 150px; /* Adjust the width as needed */
+}
+
+/* Edit and Delete Button Styles */
+.edit-button,
+.delete-button {
+  background-color: #414241;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px;
+}
+
+/* Icon Styles */
+.edit-icon::before {
+  content: '\270E'; /* Unicode for pencil symbol */
+  margin-right: 5px; /* Add space between icon and text */
+}
+
+.delete-icon::before {
+  content: '\2716'; /* Unicode for delete symbol */
+  margin-right: 5px; /* Add space between icon and text */
+}
+
+.delete-button:hover {
+  background-color: red;
+}
+
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <h2>Admin Dashboard</h2>
+    <button class="hamburger-btn" id="hamburger-btn">&#9776;</button>
+    <ul>
+      <li><button class="section-link" data-section="dashboard">Dashboard</button></li>
+      <li><button class="section-link" data-section="events">Events</button></li>
+      <li><button class="section-link" data-section="registrations">Registrations</button></li>
+      <li><button class="section-link" data-section="feedback">Feedback & Surveys</button></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <div id="dashboard" class="section active">
+      <h2>Dashboard Overview</h2>
+      <div class="summary">
+        <p>Total Events: <span id="total-events">0</span></p>
+        <p>Total Registrations: <span id="total-registrations">0</span></p>
+        <!-- Add more summary statistics here -->
+      </div>
+      <div class="graphs">
+        <!-- Add graphs or charts here -->
+      </div>
+    </div>
+
+    <div id="events" class="section">
+      <h2>Event Management</h2>
+      <div class="event-actions">
+        <a href="/create" class="button">Create Event</a>
+      </div>
+      <div class="created-events">
+        <h3>Created Events</h3>
+        <div id="event-cards-container" class="container"></div>
+      </div>
+    </div>
+
+    <div id="registrations" class="section">
+      <h2>Registration Management</h2>
+      <div class="event-list">
+        <h3>Events</h3>
+      </div>
+      <div class="registered-users">
+        <h3>Registered Users</h3>
+        <ul id="registered-users-list">
+          <!-- Registered users for selected event will be dynamically populated here -->
+        </ul>
+      </div>
+    </div>
+
+    <div id="feedback" class="section">
+      <h2>Feedback & Surveys</h2>
+      <div class="feedback-list">
+        <!-- Feedback submitted by users will be dynamically populated here -->
+      </div>
+    </div>
+  </div>
+
+  
+
+<script>
+  var counts = 0;
+  document.addEventListener('DOMContentLoaded', function () {
+    // Fetch events when the page loads
+    fetchEvents();
+    // Fetch feedback when the page loads
+    fetchFeedback();
+
+    // JavaScript to toggle sidebar visibility
+    const sectionLinks = document.querySelectorAll('.section-link');
+    const sections = document.querySelectorAll('.section');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    hamburgerBtn.addEventListener('click', function () {
+      sidebar.classList.toggle('sidebar-open');
+    });
+
+    sectionLinks.forEach(link => {
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        const targetSectionId = this.getAttribute('data-section');
+
+        sections.forEach(section => {
+          if (section.id === targetSectionId) {
+            section.classList.add('active');
+          } else {
+            section.classList.remove('active');
+          }
+        });
+      });
+    });
+  });
+
+  async function fetchEvents() {
+    try {
+      const response = await fetch('http://localhost:4001/eventslist');
+      const eventData = await response.json();
+      console.log(eventData);
+      counts = eventData.reduce((total, event) => {
+        return total + (event.registrations ? event.registrations.length : 0);
+      }, 0);
+      // Call the function to update the rows with the fetched data
+      updateEventRows(eventData);
+
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  }
+
+  function updateEventRows(events) {
+    const cardsContainer = document.getElementById('event-cards-container');
+    const totalEventsSpan = document.getElementById('total-events');
+    const totalregisters = document.getElementById('total-registrations');
+    totalEventsSpan.textContent = events.length;
+    totalregisters.textContent=counts;
+
+    // Loop through the events and create rows
+    events.forEach(event => {
+      const row = document.createElement('div');
+      row.classList.add('event-row');
+      row.setAttribute('id', `event-row-${event._id}`);
+
+      const eventName = document.createElement('h3');
+      eventName.textContent = event.eventName;
+
+      const eventDate = document.createElement('p');
+      eventDate.textContent = `${new Date(event.eventFromDate).toLocaleDateString()} to ${new Date(event.eventToDate).toLocaleDateString()}`;
+
+      const editButton = document.createElement('button');
+      editButton.classList.add('edit-button');
+      editButton.innerHTML = '<span class="edit-icon"></span>'; // Add pencil symbol
+      editButton.addEventListener('click', () => handleEditEvent(event._id));
+
+      const deleteButton = document.createElement('button');
+      deleteButton.classList.add('delete-button');
+      deleteButton.innerHTML = '<span class="delete-icon"></span>'; // Add delete symbol
+      deleteButton.addEventListener('click', () => handleDeleteEvent(event._id));
+
+      row.appendChild(eventName);
+      row.appendChild(eventDate);
+      row.appendChild(editButton);
+      row.appendChild(deleteButton);
+
+      cardsContainer.appendChild(row);
+    });
+  }
+
+  // Function to handle edit event
+  function handleEditEvent(eventId) {
+    // console.log(Edit event with ID: ${eventId});
+  }
+
+  // Function to handle delete event
+  function handleDeleteEvent(eventId) {
+    const confirmation = window.confirm("Are you sure you want to delete this event?");
+    if (confirmation) {
+      // Call the deleteEvent function with the event ID
+      deleteEvent(eventId);
+    }
+  }
+
+  // Function to delete event
+  async function deleteEvent(eventId) {
+    try {
+      const response = await fetch(`http://localhost:4001/deleteEvent/${eventId}`, {
+        method: 'DELETE'
+      });
+      if (response.ok) {
+        // If deletion is successful, remove the event row from the frontend
+        const eventRow = document.getElementById(`event-row-${eventId}`);
+        eventRow.remove();
+      } else {
+        console.error('Error deleting event:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  }
+
+  async function fetchFeedback() {
+    try {
+      const response = await fetch('http://localhost:4001/feedback');
+      const feedbackData = await response.json();
+      console.log(feedbackData);
+      // Call the function to update the feedback list with the fetched data
+      updateFeedbackList(feedbackData);
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+    }
+  }
+
+  function updateFeedbackList(feedbackItems) {
+    const feedbackList = document.querySelector('.feedback-list');
+
+    feedbackItems.forEach(item => {
+      const feedbackItem = document.createElement('div');
+      feedbackItem.classList.add('feedback-item');
+
+      // Create elements to display feedback details
+      const userName = document.createElement('h3');
+      userName.textContent = `User: ${item.Name}`;
+
+      const feedbackText = document.createElement('p');
+      feedbackText.textContent = `Feedback: ${item.Email}`;
+
+      const feedbackSubject = document.createElement('p');
+      feedbackSubject.textContent = `Subject: ${item.Subject}`;
+
+      const feedbackMessage = document.createElement('p');
+      feedbackMessage.textContent = `Message: ${item.Message}`;
+
+      // Append elements to the feedback item container
+      feedbackItem.appendChild(userName);
+      feedbackItem.appendChild(feedbackText);
+      feedbackItem.appendChild(feedbackSubject);
+      feedbackItem.appendChild(feedbackMessage);
+
+      // Append the feedback item to the feedback list
+      feedbackList.appendChild(feedbackItem);
+    });
+  }
+</script>
+</body>
+</html>
+
+</body>
+</html>

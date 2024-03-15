@@ -1,6 +1,6 @@
 const express = require("express");
-const { urlencoded } = require("body-parser");
-const collection = require('./mongo');
+const mongoose = require("mongoose");
+const Event = require('./mongo'); // Correct import statement
 const contactCollection = require('./mongo1'); // Import the contact schema
 const RegistrationCollection = require('./mongo2');
 const cors = require("cors");
@@ -40,6 +40,10 @@ app.get("/about", (req, res) => {
   res.render('aboutus1');
 });
 
+app.get("/create", (req, res) => {
+  res.render('eventcreation');
+});
+
 app.get("/explore/details", (req, res) => {
   // Decode the data from the query parameter
   const encodedData = req.query.data;
@@ -55,7 +59,7 @@ app.post("/login", (req, res) => {
 
   // Check if the username and password match the expected values
   if (username === 'admin' && password === 'admin123') {
-    res.render('eventcreation');
+    res.render('admindashboard');
   } else {
     res.redirect('/login?error=1');
   }
@@ -66,7 +70,7 @@ app.post("/events", async (req, res) => {
   console.log("POST request for events received");
 
   try {
-    let newEvent = new collection({
+    let newEvent = new Event({
       eventName: req.body.eventName,
       eventType: req.body.eventType,
       eventFromDate: req.body.eventFromDate,
@@ -84,6 +88,8 @@ app.post("/events", async (req, res) => {
       collegeWebsite: req.body.collegeWebsite,
       poster : req.body.poster,
       eventdescription : req.body.eventdescription,
+      count: 0,
+      registrations: [],
     });
     await newEvent.save();
 
@@ -144,7 +150,7 @@ app.get("/events/:eventType", async (req, res) => {
     const eventType = req.params.eventType;
 
     // Fetch data from MongoDB based on the event type
-    const events = await collection.find({ eventType });
+    const events = await Event.find({ eventType });
 
     // Render the 'eventsdetails' template and pass the fetched data
     res.json(events);
@@ -157,15 +163,27 @@ app.get("/events/:eventType", async (req, res) => {
 
 app.get("/eventdata", async (req, res) => {
   try {
-    const currentDate = new Date();
-    const oneWeekLater = new Date(currentDate);
-    oneWeekLater.setDate(oneWeekLater.getDate() + 7);
+      const currentDate = new Date();
+      const oneWeekLater = new Date(currentDate);
+      oneWeekLater.setDate(oneWeekLater.getDate() + 7);
 
-    // Fetch events within the date range from MongoDB
-    const events = await collection.find({
-      eventFromDate: { $gte: currentDate },
-      eventToDate: { $lte: oneWeekLater },
-    });
+      // Fetch events within the date range from MongoDB
+      const events = await Event.find({
+          eventFromDate: { $gte: currentDate },
+          eventToDate: { $lte: oneWeekLater },
+      });
+
+      res.json(events);
+  } catch (error) {
+      console.error("Error fetching events:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/eventslist", async (req, res) => {
+  try {
+    // Fetch all events from MongoDB
+    const events = await Event.find({});
 
     res.json(events);
   } catch (error) {
@@ -173,6 +191,76 @@ app.get("/eventdata", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+app.delete('/deleteEvent/:eventId', async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+    const deletedEvent = await Event.findByIdAndDelete(eventId);
+
+    if (!deletedEvent) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    res.sendStatus(204); 
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get("/feedback", async (req, res) => {
+  try {
+    // Fetch all events from MongoDB
+    const events = await contactCollection.find({});
+
+    res.json(events);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+app.get("/register/:eventId", (req, res) => {
+  const eventId = req.query.eventId; 
+  res.render('register', { eventId }); 
+  console.log(eventId);
+});
+
+app.post('/registers/:eventId', async (req, res) => {
+  try {
+      const eventId = req.params.eventId;
+
+      // Fetch the event data from MongoDB based on the eventId
+      const eventData = await Event.findById(eventId);
+
+      if (!eventData) {
+          return res.status(404).json({ message: 'Event not found' });
+      }
+
+      // Assuming registrations is an array property in your event object
+      eventData.registrations = eventData.registrations || [];
+
+      // Add registration data to the registrations array
+      eventData.registrations.push({
+          name: req.body.name,
+          idNumber: req.body.idNumber,
+          email: req.body.email,
+          phoneNumber: req.body.phoneNumber,
+          college: req.body.college,
+          branch: req.body.branch,
+          yearOfStudy: req.body.yearOfStudy,
+      });
+
+      // Save the updated event data back to MongoDB
+      await eventData.save();
+      console.log('Registration success');
+
+      res.json({ message: 'Registration successful', eventId });
+  } catch (error) {
+      console.error('Error handling registration:', error);
+      res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
+
 
 app.listen(4001, () => {
   console.log('Server is running on port 4001');
