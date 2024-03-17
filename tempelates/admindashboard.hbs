@@ -208,7 +208,6 @@ button:hover {
     </div>
 
     <div id="events" class="section">
-      
       <h2>Event Management</h2>
       <div class="event-actions">
         <a href="/create" class="button">Create Event</a>
@@ -220,17 +219,13 @@ button:hover {
     </div>
 
     <div id="registrations" class="section">
-      <h2>Registration Management</h2>
-      <div class="event-list">
+    <h2>Registration Management</h2>
+    <div class="event-list">
         <h3>Events</h3>
-      </div>
-      <div class="registered-users">
-        <h3>Registered Users</h3>
-        <ul id="registered-users-list">
-          <!-- Registered users for selected event will be dynamically populated here -->
-        </ul>
-      </div>
+        <div id="event-cards-container" class="event-cards-container"></div>
     </div>
+</div>
+
 
     <div id="feedback" class="section">
       <h2>Feedback & Surveys</h2>
@@ -286,6 +281,7 @@ button:hover {
       }, 0);
       // Call the function to update the rows with the fetched data
       updateEventRows(eventData);
+      updateEventCards(eventData);
 
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -332,7 +328,8 @@ button:hover {
 
   // Function to handle edit event
   function handleEditEvent(eventId) {
-    // console.log(Edit event with ID: ${eventId});
+    console.log("Event ID:", eventId);
+    window.location.href = `/editEvent/${eventId}`;
   }
 
   // Function to handle delete event
@@ -375,35 +372,131 @@ button:hover {
   }
 
   function updateFeedbackList(feedbackItems) {
-    const feedbackList = document.querySelector('.feedback-list');
+  const feedbackList = document.querySelector('.feedback-list');
 
-    feedbackItems.forEach(item => {
-      const feedbackItem = document.createElement('div');
-      feedbackItem.classList.add('feedback-item');
+  feedbackItems.forEach(item => {
+    const feedbackItem = document.createElement('div');
+    feedbackItem.classList.add('feedback-item');
 
-      // Create elements to display feedback details
-      const userName = document.createElement('h3');
-      userName.textContent = `User: ${item.Name}`;
+    // Create elements to display feedback details
+    const userName = document.createElement('h3');
+    userName.textContent = `User: ${item.Name}`;
 
-      const feedbackText = document.createElement('p');
-      feedbackText.textContent = `Feedback: ${item.Email}`;
+    const feedbackText = document.createElement('p');
+    feedbackText.textContent = `Feedback: ${item.Email}`;
 
-      const feedbackSubject = document.createElement('p');
-      feedbackSubject.textContent = `Subject: ${item.Subject}`;
+    const feedbackSubject = document.createElement('p');
+    feedbackSubject.textContent = `Subject: ${item.Subject}`;
 
-      const feedbackMessage = document.createElement('p');
-      feedbackMessage.textContent = `Message: ${item.Message}`;
+    const feedbackMessage = document.createElement('p');
+    feedbackMessage.textContent = `Message: ${item.Message}`;
 
-      // Append elements to the feedback item container
-      feedbackItem.appendChild(userName);
-      feedbackItem.appendChild(feedbackText);
-      feedbackItem.appendChild(feedbackSubject);
-      feedbackItem.appendChild(feedbackMessage);
+    // Create reply button
+    const replyButton = document.createElement('button');
+    replyButton.textContent = 'Reply';
+    replyButton.classList.add('reply-button');
+    replyButton.addEventListener('click', () => handleReplyFeedback(item));
 
-      // Append the feedback item to the feedback list
-      feedbackList.appendChild(feedbackItem);
+    // Append elements to the feedback item container
+    feedbackItem.appendChild(userName);
+    feedbackItem.appendChild(feedbackText);
+    feedbackItem.appendChild(feedbackSubject);
+    feedbackItem.appendChild(feedbackMessage);
+    feedbackItem.appendChild(replyButton);
+
+    // Append the feedback item to the feedback list
+    feedbackList.appendChild(feedbackItem);
+  });
+}
+
+
+  function updateEventCards(events) {
+    const eventCardsContainer = document.querySelector('.event-cards-container');
+    eventCardsContainer.innerHTML = '';
+
+    events.forEach(event => {
+        const eventCard = document.createElement('div');
+        eventCard.classList.add('event-card');
+        eventCard.style.border = '2px solid #ccc'; 
+        eventCard.style.marginBottom = '6px'; 
+        eventCard.style.overflowY = 'hidden'; 
+        eventCard.style.height = '470px'; 
+
+        const eventNameHeading = document.createElement('h3');
+        eventNameHeading.textContent = event.eventName;
+
+        const registrationList = document.createElement('div');
+        registrationList.style.height = '400px';
+        registrationList.style.overflowY = 'scroll';
+        registrationList.classList.add('registration-list');
+
+        if (event.registrations && event.registrations.length > 0) {
+            event.registrations.forEach(registration => {
+                const registrationCard = createRegistrationCard(registration);
+                registrationList.appendChild(registrationCard);
+            });
+        } else {
+            const noRegistrationItem = document.createElement('p');
+            noRegistrationItem.textContent = 'No registrations yet.';
+            registrationList.appendChild(noRegistrationItem);
+        }
+
+        eventCard.appendChild(eventNameHeading);
+        eventCard.appendChild(registrationList);
+        eventCardsContainer.appendChild(eventCard);
     });
+}
+
+
+
+function createRegistrationCard(registration) {
+    const registrationCard = document.createElement('div');
+    registrationCard.classList.add('registration-card');
+    registrationCard.style.border = '2px solid #ccc';
+    registrationCard.style.marginBottom = '3px';
+    registrationCard.style.padding = '6px';
+
+    Object.entries(registration).forEach(([key, value]) => {
+        // Exclude _id field
+        if (key !== '_id') {
+            const detailParagraph = document.createElement('p');
+            detailParagraph.innerHTML = `<strong>${key}:</strong> ${value}`;
+            registrationCard.appendChild(detailParagraph);
+        }
+    });
+
+    return registrationCard;
+}
+// Function to handle replying to feedback
+async function handleReplyFeedback(feedbackItem) {
+  try {
+    const userId = feedbackItem._id; // Assuming _id corresponds to userId
+    const message = prompt("Enter your message to reply:");
+
+    if (message) {
+      const response = await fetch("/replyFeedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, message }),
+      });
+
+      if (response.ok) {
+        alert("Reply sent successfully");
+      } else {
+        alert("Failed to send reply");
+      }
+    }
+  } catch (error) {
+    console.error("Error replying to feedback:", error);
+    alert("An error occurred while replying to feedback");
   }
+}
+
+
+
+  
 </script>
 </body>
 </html>

@@ -18,19 +18,11 @@
 
         form {
             background-color: #fff;
-<<<<<<< HEAD
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 80%;
             max-width: 400px;
-=======
-            padding: 40px; /* Increased padding for a larger form */
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%; /* Set the width of the form */
-            max-width: 400px; /* Set a maximum width for smaller screens */
->>>>>>> 0476a05d11f28f8d6a4fa8cc579d21dd3ee5298a
         }
 
         label {
@@ -57,11 +49,7 @@
 </head>
 <body>
 
-<<<<<<< HEAD
     <form id="registrationForm" method="POST" >
-=======
-    <form id="registrationForm" method="POST" action="/registersend">
->>>>>>> 0476a05d11f28f8d6a4fa8cc579d21dd3ee5298a
         <h2>Event Registration</h2>
 
         <label for="name">Name:</label>
@@ -90,47 +78,28 @@
             <option value="4">4th Year</option>
         </select>
 
-<<<<<<< HEAD
         <button type="button" onclick="submitForm()">Submit</button>
-=======
-        <button type="Submit" value="Submit">Submit</button>
->>>>>>> 0476a05d11f28f8d6a4fa8cc579d21dd3ee5298a
     </form>
 
     <script>
         function submitForm() {
-<<<<<<< HEAD
-=======
-            // You can add validation and additional processing here before submitting the form
-            // For simplicity, we'll just submit the form data to the console for now
->>>>>>> 0476a05d11f28f8d6a4fa8cc579d21dd3ee5298a
             const formData = new FormData(document.getElementById('registrationForm'));
             const data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
-<<<<<<< HEAD
 
             // Extract event ID from the URL
             const eventId = window.location.pathname.split('/').pop();
 
             // Sending the data to your backend API along with the event ID
             fetch(`http://localhost:4001/registers/${eventId}`, {
-=======
-            console.log(data);
-
-            // Here, you can use AJAX to send the form data to your backend for processing
-            // Example using Fetch API:
-            /*
-            fetch('/your-backend-endpoint', {
->>>>>>> 0476a05d11f28f8d6a4fa8cc579d21dd3ee5298a
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
             })
-<<<<<<< HEAD
             .then(response => {
                 if (response.ok) {
                     return response.json(); // Assuming your server sends JSON response
@@ -153,18 +122,3 @@
 
 </body>
 </html>
-=======
-            .then(response => response.json())
-            .then(result => {
-                console.log('Success:', result);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-            */
-        }
-    </script>
-
-</body>
-</html>
->>>>>>> 0476a05d11f28f8d6a4fa8cc579d21dd3ee5298a

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+    <script src="server.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #ffffff;
+            background-color: #628f95;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        form {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #efcff8;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        select,
+        input[type="text"],
+        input[type="date"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #61a0a8;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #4b7c82;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Event Details</h1>
+
+<form id="editEventForm" method="POST">
+    <label for="eventName">Event Name:</label>
+    <input type="text" id="eventName" autocomplete="off" name="eventName" required>
+
+    <label for="eventType">Event Type:</label>
+    <select id="eventType" name="eventType" required>
+        <option value="Yearly Events">Yearly Events</option>
+        <option value="Department Events">Department Events</option>
+        <option value="Sport Events">Sport Events</option>
+        <option value="Clubs Events">Clubs Events</option>
+        <option value="Tech Talks">Tech Talks</option>
+        <option value="Movie Promotions">Movie Promotions</option>
+        <option value="Past Events">Past Events</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <div class="date-group">
+        <label for="eventFromDate">Event Start Date:</label>
+        <input type="date" id="eventFromDate" name="eventFromDate" required>
+
+        <label for="eventToDate">Event End Date:</label>
+        <input type="date" id="eventToDate" name="eventToDate" required>
+    </div>
+
+    <div class="date-group">
+        <label for="registrationStartDate">Registration Start Date:</label>
+        <input type="date" id="registrationStartDate" name="registrationStartDate" required>
+
+        <label for="registrationEndDate">Registration End Date:</label>
+        <input type="date" id="registrationEndDate" name="registrationEndDate" required>
+    </div>
+
+    <h2 style="color: #333; font-size: 18px;">Who Can Participate?</h2>
+    <select id="participateGroup" name="participateGroup" required>
+        <option value="Common For All">Common For All</option>
+        <option value="IT">IT</option>
+        <option value="CSE">CSE</option>
+        <option value="ECE">ECE</option>
+        <option value="EEE">EEE</option>
+        <option value="Mechanical">Mechanical</option>
+        <option value="Civil">Civil</option>
+        <option value="AIDS">AIDS</option>
+        <option value="CSM">CSM</option>
+        <option value="CIC">CIC</option>
+        <option value="CSO">CSO</option>
+    </select>
+
+    <div class="contact-details-group">
+        <h2 style="color: #333; font-size: 18px;">Event Contact Details</h2>
+
+        <label for="contactemail">Contact Email (Official):</label>
+        <input type="email" id="contactemail" name="contactemail" required>
+
+        <label for="contactHOD">Contact Number 1 [HOD]:</label>
+        <input type="tel" id="contactHOD" name="contactHOD" required>
+
+        <label for="contactCoordinator">Contact Number 2 [STUDENT COORDINATOR]:</label>
+        <input type="tel" id="contactCoordinator" name="contactCoordinator" required>
+    </div>
+
+    <div class="contact-details-group">
+        <h2 style="color: #333; font-size: 18px;">Details of the Person Submitting the Event</h2>
+
+        <label for="eventby">Your Name [Public Display]:</label>
+        <input type="text" id="eventby" name="eventby" required>
+
+        <label for="Emailofcreator">Your Email [Private]:</label>
+        <input type="email" id="Emailofcreator" name="Emailofcreator" required>
+
+        <label for="contactcreator">Your Phone [Private]:</label>
+        <input type="tel" id="contactcreator" name="contactcreator" required>
+    </div>
+
+    <label for="eventdescription">Event Location:</label>
+    <input type="text" id="eventdescription" name="eventdescription" required>
+
+    <label for="institutionName">Institution Name [College Name]:</label>
+    <input type="text" id="institutionName" name="institutionName" required>
+
+    <label for="collegeWebsite">College Website:</label>
+    <input type="text" id="collegeWebsite" name="collegeWebsite" required>
+
+    <label for="poster">Event Poster Link:</label>
+    <input type="text" id="poster" name="poster" required>
+
+    <br><br>
+
+    <input type="Submit" value="Update">
+</form>
+
+<script>
+    let eventId; // Define eventId globally
+
+    // Function to extract the event ID from the URL
+    function getEventIdFromURL() {
+        const url = window.location.href;
+        const parts = url.split('/');
+        return parts[parts.length - 1];
+    }
+
+    // Function to fetch event data using the event ID
+    async function fetchEventData(eventId) {
+        try {
+            const response = await fetch(`http://localhost:4001/eventEdit/${eventId}`);
+            const eventData = await response.json();
+            console.log("this is for edit" + eventData)
+            return eventData;
+        } catch (error) {
+            console.error('Error fetching event data:', error);
+        }
+    }
+
+    // Function to populate the form fields with event data
+    async function populateFormWithEventData(eventData) {
+        const form = document.getElementById('editEventForm');
+        // Populate form fields with eventData
+        document.getElementById('eventName').value = eventData.eventName;
+        document.getElementById('eventType').value = eventData.eventType;
+        document.getElementById('eventFromDate').value = eventData.eventFromDate;
+        document.getElementById('eventToDate').value = eventData.eventToDate;
+        document.getElementById('registrationStartDate').value = eventData.registrationStartDate;
+        document.getElementById('registrationEndDate').value = eventData.registrationEndDate;
+        document.getElementById('participateGroup').value = eventData.participateGroup;
+        document.getElementById('contactemail').value = eventData.contactemail;
+        document.getElementById('contactHOD').value = eventData.contactHOD;
+        document.getElementById('contactCoordinator').value = eventData.contactCoordinator;
+        document.getElementById('eventby').value = eventData.eventby;
+        document.getElementById('Emailofcreator').value = eventData.Emailofcreator;
+        document.getElementById('contactcreator').value = eventData.contactcreator;
+        document.getElementById('eventdescription').value = eventData.eventdescription;
+        document.getElementById('institutionName').value = eventData.institutionName;
+        document.getElementById('collegeWebsite').value = eventData.collegeWebsite;
+        document.getElementById('poster').value = eventData.poster;
+    }
+
+    // Function to handle form submission
+    async function handleSubmit(event) {
+        event.preventDefault();
+        // Get form data
+        const formData = new FormData(event.target);
+        // Convert FormData to JSON object
+        const jsonData = {};
+        formData.forEach((value, key) => {
+            jsonData[key] = value;
+        });
+        // Send JSON data to the backend
+        try {
+            const response = await fetch(`http://localhost:4001/updateEvent/${eventId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            });
+            // Handle response
+            if (response.ok) {
+                // Event updated successfully
+                console.log('Event updated successfully');
+            } else {
+                console.error('Error updating event:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error updating event:', error);
+        }
+    }
+
+    // Main function to load event data and populate the form
+    document.addEventListener('DOMContentLoaded', async () => {
+        eventId = getEventIdFromURL(); // Set the eventId
+        const eventData = await fetchEventData(eventId);
+        if (eventData) {
+            populateFormWithEventData(eventData);
+        } else {
+            console.error('Event data not found');
+        }
+        const form = document.getElementById('editEventForm');
+        form.addEventListener('submit', handleSubmit);
+    });
+</script>
+
+
+
+</body>
+
+</html>

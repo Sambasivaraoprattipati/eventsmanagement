@@ -44,6 +44,12 @@ app.get("/create", (req, res) => {
   res.render('eventcreation');
 });
 
+app.get("/editEvent/:eventId", (req, res) => {
+  const eventId = req.params.eventId;
+  res.render('editevent', { eventId });
+});
+
+
 app.get("/explore/details", (req, res) => {
   // Decode the data from the query parameter
   const encodedData = req.query.data;
@@ -161,6 +167,32 @@ app.get("/events/:eventType", async (req, res) => {
   }
 });
 
+app.get('/eventEdit/:eventId', async (req, res) => {
+  try {
+      const eventId = req.params.eventId;
+      // Query the database for the event with the given ID
+      const eventData = await Event.findById(eventId);
+      console.log(eventData)
+      res.json(eventData);
+  } catch (error) {
+      console.error('Error fetching event data:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/updateEvent/:eventId', async (req, res) => {
+  try {
+      const eventId = req.params.eventId;
+      const eventDataToUpdate = req.body; // Updated event data from the request body
+      // Update the event in the database
+      const updatedEvent = await Event.findByIdAndUpdate(eventId, eventDataToUpdate, { new: true });
+      res.json(updatedEvent);
+  } catch (error) {
+      console.error('Error updating event:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get("/eventdata", async (req, res) => {
   try {
       const currentDate = new Date();
@@ -258,6 +290,29 @@ app.post('/registers/:eventId', async (req, res) => {
   } catch (error) {
       console.error('Error handling registration:', error);
       res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
+
+app.post("/replyFeedback", async (req, res) => {
+  try {
+    const { userId, message } = req.body;
+
+    // Fetch the user's email based on the userId
+    const user = await contactCollection.findById(userId);
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Send the message to the user's email
+    // Replace this with your email sending logic
+    console.log(`Sending reply to ${user.Email}: ${message}`);
+
+    res.json({ message: "Reply sent successfully" });
+  } catch (error) {
+    console.error("Error replying to feedback:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
