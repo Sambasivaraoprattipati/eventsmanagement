@@ -106,7 +106,7 @@
             const eventId = window.location.pathname.split('/').pop();
 
             // Sending the data to your backend API along with the event ID
-            fetch(`http://localhost:4001/registers/${eventId}`, {
+            fetch(`https://eventsmanagement-1.onrender.com/registers/${eventId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
