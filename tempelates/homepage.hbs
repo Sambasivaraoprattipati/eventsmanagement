@@ -203,7 +203,7 @@
         // Function to fetch events data from the backend
         async function fetchEvents() {
             try {
-                const response = await fetch('http://localhost:4001/eventdata');
+                const response = await fetch('https://eventsmanagement-1.onrender.com/eventdata');
                 const eventData = await response.json();
                 console.log(eventData);
 
