@@ -7,179 +7,197 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     /* Global Styles */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f5f5f5;
-}
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
 
-/* Sidebar Styles */
-.sidebar {
-  position: fixed;
-  left: -250px;
-  top: 0;
-  width: 250px;
-  height: 100%;
-  background-color: #333;
-  padding: 23px;
-  transition: left 0.3s ease;
-}
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      left: -250px;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #333;
+      padding: 23px;
+      transition: left 0.3s ease;
+    }
 
-.sidebar-open {
-  left: 0;
-}
+    .sidebar-open {
+      left: 0;
+    }
 
-.sidebar h2 {
-  color: #fff;
-  text-align: center;
-  margin-bottom: 20px;
-}
+    .sidebar h2 {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-.hamburger-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  position: absolute;
-  top: -10px;
-  right: 0px;
-}
+    .hamburger-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      position: absolute;
+      top: -10px;
+      right: 0px;
+    }
 
-.sidebar ul {
-  list-style-type: none;
-  padding: 0;
-}
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
 
-.sidebar ul li {
-  margin-bottom: 10px;
-}
+    .sidebar ul li {
+      margin-bottom: 10px;
+    }
 
-.sidebar ul li button {
-  display: block;
-  color: #fff;
-  background-color: transparent;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    .sidebar ul li button {
+      display: block;
+      color: #fff;
+      background-color: transparent;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-.sidebar ul li button:hover {
-  background-color: #555;
-}
+    .sidebar ul li button:hover {
+      background-color: #555;
+    }
 
-/* Content Styles */
-.content {
-  margin-left: 300px;
-  padding: 20px;
-}
+    /* Logout Button Styles */
+    .logout-btn {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 46px); /* Adjust for padding */
+      text-align: center;
+    }
 
-.section {
-  margin-bottom: 40px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-  padding: 20px;
-}
+    .logout-btn button {
+      width: 100%;
+      color: #fff;
+      background-color: #d9534f;
+    }
 
-.section h2 {
-  margin-bottom: 20px;
-  color: #333;
-}
+    .logout-btn button:hover {
+      background-color: #c9302c;
+    }
 
-.section:not(.active) {
-  display: none;
-}
+    /* Content Styles */
+    .content {
+      margin-left: 300px;
+      padding: 20px;
+    }
 
-/* Button Content Styles */
-button {
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    .section {
+      margin-bottom: 40px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
 
-button:hover {
-  background-color: #71bb65;
-}
+    .section h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
 
+    .section:not(.active) {
+      display: none;
+    }
 
-/* Updated CSS */
-.content a.button {
-  text-decoration: none; /* Remove underline */
-  display: inline-block; /* Ensure button behaves like a block element */
-  border: 2px solid #4CAF50; /* Add border */
-  border-radius: 5px;
-  padding: 10px 20px;
-  color: rgb(0, 0, 0);
-}
+    /* Button Content Styles */
+    button {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-.content a.button:hover {
-  background-color: #45a049;
-}
+    button:hover {
+      background-color: #71bb65;
+    }
 
-/* Event Row Styles */
-.event-row {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  padding: 20px;
-  display: flex; /* Use flexbox for card contents alignment */
-  align-items: center; /* Align items vertically */
-  justify-content: space-between; /* Align items horizontally */
-}
+    /* Updated CSS */
+    .content a.button {
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Ensure button behaves like a block element */
+      border: 2px solid #4CAF50; /* Add border */
+      border-radius: 5px;
+      padding: 10px 20px;
+      color: rgb(0, 0, 0);
+    }
 
-.event-row h3 {
-  margin: 0;
-  flex: 1; /* Allow event name to grow and occupy available space */
-}
+    .content a.button:hover {
+      background-color: #45a049;
+    }
 
-.event-row p {
-  margin: 0;
-  text-align: center; /* Center the text */
-  flex: 10 auto; /* Prevent date from growing and keep fixed width */
-  width: 150px; /* Adjust the width as needed */
-}
+    /* Event Row Styles */
+    .event-row {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+      display: flex; /* Use flexbox for card contents alignment */
+      align-items: center; /* Align items vertically */
+      justify-content: space-between; /* Align items horizontally */
+    }
 
-/* Edit and Delete Button Styles */
-.edit-button,
-.delete-button {
-  background-color: #414241;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  margin: 5px;
-}
+    .event-row h3 {
+      margin: 0;
+      flex: 1; /* Allow event name to grow and occupy available space */
+    }
 
-/* Icon Styles */
-.edit-icon::before {
-  content: '\270E'; /* Unicode for pencil symbol */
-  margin-right: 5px; /* Add space between icon and text */
-}
+    .event-row p {
+      margin: 0;
+      text-align: center; /* Center the text */
+      flex: 10 auto; /* Prevent date from growing and keep fixed width */
+      width: 150px; /* Adjust the width as needed */
+    }
 
-.delete-icon::before {
-  content: '\2716'; /* Unicode for delete symbol */
-  margin-right: 5px; /* Add space between icon and text */
-}
+    /* Edit and Delete Button Styles */
+    .edit-button,
+    .delete-button {
+      background-color: #414241;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
 
-.delete-button:hover {
-  background-color: red;
-}
+    /* Icon Styles */
+    .edit-icon::before {
+      content: '\270E'; /* Unicode for pencil symbol */
+      margin-right: 5px; /* Add space between icon and text */
+    }
 
+    .delete-icon::before {
+      content: '\2716'; /* Unicode for delete symbol */
+      margin-right: 5px; /* Add space between icon and text */
+    }
+
+    .delete-button:hover {
+      background-color: red;
+    }
   </style>
 </head>
 <body>
@@ -192,6 +210,9 @@ button:hover {
       <li><button class="section-link" data-section="registrations">Registrations</button></li>
       <li><button class="section-link" data-section="feedback">Feedback & Surveys</button></li>
     </ul>
+    <div class="logout-btn">
+      <button id="logout-btn">Logout</button>
+    </div>
   </div>
 
   <div class="content">
@@ -219,13 +240,12 @@ button:hover {
     </div>
 
     <div id="registrations" class="section">
-    <h2>Registration Management</h2>
-    <div class="event-list">
+      <h2>Registration Management</h2>
+      <div class="event-list">
         <h3>Events</h3>
         <div id="event-cards-container" class="event-cards-container"></div>
+      </div>
     </div>
-</div>
-
 
     <div id="feedback" class="section">
       <h2>Feedback & Surveys</h2>
@@ -235,186 +255,204 @@ button:hover {
     </div>
   </div>
 
-  
+  <script>
+    var counts = 0;
+    document.addEventListener('DOMContentLoaded', function () {
+      // Fetch events when the page loads
+      fetchEvents();
+      // Fetch feedback when the page loads
+      fetchFeedback();
 
-<script>
-  var counts = 0;
-  document.addEventListener('DOMContentLoaded', function () {
-    // Fetch events when the page loads
-    fetchEvents();
-    // Fetch feedback when the page loads
-    fetchFeedback();
+      // JavaScript to toggle sidebar visibility
+      const sectionLinks = document.querySelectorAll('.section-link');
+      const sections = document.querySelectorAll('.section');
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const sidebar = document.getElementById('sidebar');
+      const logoutBtn = document.getElementById('logout-btn');
 
-    // JavaScript to toggle sidebar visibility
-    const sectionLinks = document.querySelectorAll('.section-link');
-    const sections = document.querySelectorAll('.section');
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const sidebar = document.getElementById('sidebar');
+      hamburgerBtn.addEventListener('click', function () {
+        sidebar.classList.toggle('sidebar-open');
+      });
 
-    hamburgerBtn.addEventListener('click', function () {
-      sidebar.classList.toggle('sidebar-open');
-    });
+      sectionLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+          const targetSectionId = this.getAttribute('data-section');
 
-    sectionLinks.forEach(link => {
-      link.addEventListener('click', function (event) {
-        event.preventDefault();
-        const targetSectionId = this.getAttribute('data-section');
-
-        sections.forEach(section => {
-          if (section.id === targetSectionId) {
-            section.classList.add('active');
-          } else {
-            section.classList.remove('active');
-          }
+          sections.forEach(section => {
+            if (section.id === targetSectionId) {
+              section.classList.add('active');
+            } else {
+              section.classList.remove('active');
+            }
+          });
         });
       });
-    });
-  });
 
-  async function fetchEvents() {
-    try {
-      const response = await fetch('http://localhost:4001/eventslist');
-      const eventData = await response.json();
-      console.log(eventData);
-      counts = eventData.reduce((total, event) => {
-        return total + (event.registrations ? event.registrations.length : 0);
-      }, 0);
-      // Call the function to update the rows with the fetched data
-      updateEventRows(eventData);
-      updateEventCards(eventData);
-
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  }
-
-  function updateEventRows(events) {
-    const cardsContainer = document.getElementById('event-cards-container');
-    const totalEventsSpan = document.getElementById('total-events');
-    const totalregisters = document.getElementById('total-registrations');
-    totalEventsSpan.textContent = events.length;
-    totalregisters.textContent=counts;
-
-    // Loop through the events and create rows
-    events.forEach(event => {
-      const row = document.createElement('div');
-      row.classList.add('event-row');
-      row.setAttribute('id', `event-row-${event._id}`);
-
-      const eventName = document.createElement('h3');
-      eventName.textContent = event.eventName;
-
-      const eventDate = document.createElement('p');
-      eventDate.textContent = `${new Date(event.eventFromDate).toLocaleDateString()} to ${new Date(event.eventToDate).toLocaleDateString()}`;
-
-      const editButton = document.createElement('button');
-      editButton.classList.add('edit-button');
-      editButton.innerHTML = '<span class="edit-icon"></span>'; // Add pencil symbol
-      editButton.addEventListener('click', () => handleEditEvent(event._id));
-
-      const deleteButton = document.createElement('button');
-      deleteButton.classList.add('delete-button');
-      deleteButton.innerHTML = '<span class="delete-icon"></span>'; // Add delete symbol
-      deleteButton.addEventListener('click', () => handleDeleteEvent(event._id));
-
-      row.appendChild(eventName);
-      row.appendChild(eventDate);
-      row.appendChild(editButton);
-      row.appendChild(deleteButton);
-
-      cardsContainer.appendChild(row);
-    });
-  }
-
-  // Function to handle edit event
-  function handleEditEvent(eventId) {
-    console.log("Event ID:", eventId);
-    window.location.href = `/editEvent/${eventId}`;
-  }
-
-  // Function to handle delete event
-  function handleDeleteEvent(eventId) {
-    const confirmation = window.confirm("Are you sure you want to delete this event?");
-    if (confirmation) {
-      // Call the deleteEvent function with the event ID
-      deleteEvent(eventId);
-    }
-  }
-
-  // Function to delete event
-  async function deleteEvent(eventId) {
-    try {
-      const response = await fetch(`http://localhost:4001/deleteEvent/${eventId}`, {
-        method: 'DELETE'
+      // Logout button click event
+      logoutBtn.addEventListener('click', function () {
+        window.location.href = '/'; // Redirect to home page
       });
-      if (response.ok) {
-        // If deletion is successful, remove the event row from the frontend
-        const eventRow = document.getElementById(`event-row-${eventId}`);
-        eventRow.remove();
-      } else {
-        console.error('Error deleting event:', response.statusText);
+    });
+
+    async function fetchEvents() {
+      try {
+        const response = await fetch('http://localhost:4001/eventslist');
+        const eventData = await response.json();
+        console.log(eventData);
+        counts = eventData.reduce((total, event) => {
+          return total + (event.registrations ? event.registrations.length : 0);
+        }, 0);
+        // Call the function to update the rows with the fetched data
+        updateEventRows(eventData);
+        updateEventCards(eventData);
+      } catch (error) {
+        console.error('Error fetching events:', error);
       }
-    } catch (error) {
-      console.error('Error deleting event:', error);
     }
-  }
 
-  async function fetchFeedback() {
-    try {
-      const response = await fetch('http://localhost:4001/feedback');
-      const feedbackData = await response.json();
-      console.log(feedbackData);
-      // Call the function to update the feedback list with the fetched data
-      updateFeedbackList(feedbackData);
-    } catch (error) {
-      console.error('Error fetching feedback:', error);
+    function updateEventRows(events) {
+      const cardsContainer = document.getElementById('event-cards-container');
+      const totalEventsSpan = document.getElementById('total-events');
+      const totalregisters = document.getElementById('total-registrations');
+      totalEventsSpan.textContent = events.length;
+      totalregisters.textContent = counts;
+
+      // Loop through the events and create rows
+      events.forEach(event => {
+        const row = document.createElement('div');
+        row.classList.add('event-row');
+        row.setAttribute('id', `event-row-${event._id}`);
+
+        const eventName = document.createElement('h3');
+        eventName.textContent = event.eventName;
+
+        const eventDate = document.createElement('p');
+        eventDate.textContent = `${new Date(event.eventFromDate).toLocaleDateString()} to ${new Date(event.eventToDate).toLocaleDateString()}`;
+      
+        const analysisButton = document.createElement('button');
+        analysisButton.classList.add('edit-button');
+        analysisButton.innerHTML = '<span>Analysis</span>'; // Add pencil symbol
+        analysisButton.addEventListener('click', () => handleAnalysisEvent(event._id));
+
+
+
+        const editButton = document.createElement('button');
+        editButton.classList.add('edit-button');
+        editButton.innerHTML = '<span class="edit-icon"></span>'; // Add pencil symbol
+        editButton.addEventListener('click', () => handleEditEvent(event._id));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('delete-button');
+        deleteButton.innerHTML = '<span class="delete-icon"></span>'; // Add delete symbol
+        deleteButton.addEventListener('click', () => handleDeleteEvent(event._id));
+
+        row.appendChild(eventName);
+        row.appendChild(eventDate);
+        row.appendChild(analysisButton);
+
+        row.appendChild(editButton);
+        row.appendChild(deleteButton);
+
+        cardsContainer.appendChild(row);
+      });
     }
-  }
 
-  function updateFeedbackList(feedbackItems) {
-  const feedbackList = document.querySelector('.feedback-list');
+    // Function to handle edit event
+    function handleEditEvent(eventId) {
+      console.log("Event ID:", eventId);
+      window.location.href = `/editEvent/${eventId}`;
+    }
 
-  feedbackItems.forEach(item => {
-    const feedbackItem = document.createElement('div');
-    feedbackItem.classList.add('feedback-item');
-
-    // Create elements to display feedback details
-    const userName = document.createElement('h3');
-    userName.textContent = `User: ${item.Name}`;
-
-    const feedbackText = document.createElement('p');
-    feedbackText.textContent = `Feedback: ${item.Email}`;
-
-    const feedbackSubject = document.createElement('p');
-    feedbackSubject.textContent = `Subject: ${item.Subject}`;
-
-    const feedbackMessage = document.createElement('p');
-    feedbackMessage.textContent = `Message: ${item.Message}`;
-
-    // Create reply button
-    const replyButton = document.createElement('button');
-    replyButton.textContent = 'Reply';
-    replyButton.classList.add('reply-button');
-    replyButton.addEventListener('click', () => handleReplyFeedback(item));
-
-    // Append elements to the feedback item container
-    feedbackItem.appendChild(userName);
-    feedbackItem.appendChild(feedbackText);
-    feedbackItem.appendChild(feedbackSubject);
-    feedbackItem.appendChild(feedbackMessage);
-    feedbackItem.appendChild(replyButton);
-
-    // Append the feedback item to the feedback list
-    feedbackList.appendChild(feedbackItem);
-  });
+    function handleAnalysisEvent(eventId) {
+    console.log("Event ID:", eventId);
+    window.location.href = `/analysis?eventId=${eventId}`;
 }
 
 
-  function updateEventCards(events) {
-    const eventCardsContainer = document.querySelector('.event-cards-container');
-    eventCardsContainer.innerHTML = '';
 
-    events.forEach(event => {
+    // Function to handle delete event
+    function handleDeleteEvent(eventId) {
+      const confirmation = window.confirm("Are you sure you want to delete this event?");
+      if (confirmation) {
+        // Call the deleteEvent function with the event ID
+        deleteEvent(eventId);
+      }
+    }
+
+    // Function to delete event
+    async function deleteEvent(eventId) {
+      try {
+        const response = await fetch(`http://localhost:4001/deleteEvent/${eventId}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          // If deletion is successful, remove the event row from the frontend
+          const eventRow = document.getElementById(`event-row-${eventId}`);
+          eventRow.remove();
+        } else {
+          console.error('Error deleting event:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error deleting event:', error);
+      }
+    }
+
+    async function fetchFeedback() {
+      try {
+        const response = await fetch('http://localhost:4001/allfeedback');
+        const feedbackData = await response.json();
+        console.log(feedbackData);
+        // Call the function to update the feedback list with the fetched data
+        updateFeedbackList(feedbackData);
+      } catch (error) {
+        console.error('Error fetching feedback:', error);
+      }
+    }
+
+    function updateFeedbackList(feedbackItems) {
+      const feedbackList = document.querySelector('.feedback-list');
+
+      feedbackItems.forEach(item => {
+        const feedbackItem = document.createElement('div');
+        feedbackItem.classList.add('feedback-item');
+
+        // Create elements to display feedback details
+        const userName = document.createElement('h3');
+        userName.textContent = `User: ${item.Name}`;
+
+        const feedbackText = document.createElement('p');
+        feedbackText.textContent = `Feedback: ${item.Email}`;
+
+        const feedbackSubject = document.createElement('p');
+        feedbackSubject.textContent = `Subject: ${item.Subject}`;
+
+        const feedbackMessage = document.createElement('p');
+        feedbackMessage.textContent = `Message: ${item.Message}`;
+
+        // Create reply button
+        const replyButton = document.createElement('button');
+        replyButton.textContent = 'Reply';
+        replyButton.classList.add('reply-button');
+        replyButton.addEventListener('click', () => handleReplyFeedback(item));
+
+        // Append elements to the feedback item container
+        feedbackItem.appendChild(userName);
+        feedbackItem.appendChild(feedbackText);
+        feedbackItem.appendChild(feedbackSubject);
+        feedbackItem.appendChild(feedbackMessage);
+        feedbackItem.appendChild(replyButton);
+
+        // Append the feedback item to the feedback list
+        feedbackList.appendChild(feedbackItem);
+      });
+    }
+
+    function updateEventCards(events) {
+      const eventCardsContainer = document.querySelector('.event-cards-container');
+      eventCardsContainer.innerHTML = '';
+
+      events.forEach(event => {
         const eventCard = document.createElement('div');
         eventCard.classList.add('event-card');
         eventCard.style.border = '2px solid #ccc'; 
@@ -431,75 +469,67 @@ button:hover {
         registrationList.classList.add('registration-list');
 
         if (event.registrations && event.registrations.length > 0) {
-            event.registrations.forEach(registration => {
-                const registrationCard = createRegistrationCard(registration);
-                registrationList.appendChild(registrationCard);
-            });
+          event.registrations.forEach(registration => {
+            const registrationCard = createRegistrationCard(registration);
+            registrationList.appendChild(registrationCard);
+          });
         } else {
-            const noRegistrationItem = document.createElement('p');
-            noRegistrationItem.textContent = 'No registrations yet.';
-            registrationList.appendChild(noRegistrationItem);
+          const noRegistrationItem = document.createElement('p');
+          noRegistrationItem.textContent = 'No registrations yet.';
+          registrationList.appendChild(noRegistrationItem);
         }
 
         eventCard.appendChild(eventNameHeading);
         eventCard.appendChild(registrationList);
         eventCardsContainer.appendChild(eventCard);
-    });
-}
+      });
+    }
 
+    function createRegistrationCard(registration) {
+      const registrationCard = document.createElement('div');
+      registrationCard.classList.add('registration-card');
+      registrationCard.style.border = '2px solid #ccc';
+      registrationCard.style.marginBottom = '3px';
+      registrationCard.style.padding = '6px';
 
-
-function createRegistrationCard(registration) {
-    const registrationCard = document.createElement('div');
-    registrationCard.classList.add('registration-card');
-    registrationCard.style.border = '2px solid #ccc';
-    registrationCard.style.marginBottom = '3px';
-    registrationCard.style.padding = '6px';
-
-    Object.entries(registration).forEach(([key, value]) => {
+      Object.entries(registration).forEach(([key, value]) => {
         // Exclude _id field
         if (key !== '_id') {
-            const detailParagraph = document.createElement('p');
-            detailParagraph.innerHTML = `<strong>${key}:</strong> ${value}`;
-            registrationCard.appendChild(detailParagraph);
+          const detailParagraph = document.createElement('p');
+          detailParagraph.innerHTML = `<strong>${key}:</strong> ${value}`;
+          registrationCard.appendChild(detailParagraph);
         }
-    });
-
-    return registrationCard;
-}
-// Function to handle replying to feedback
-async function handleReplyFeedback(feedbackItem) {
-  try {
-    const userId = feedbackItem._id; // Assuming _id corresponds to userId
-    const message = prompt("Enter your message to reply:");
-
-    if (message) {
-      const response = await fetch("/replyFeedback", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, message }),
       });
 
-      if (response.ok) {
-        alert("Reply sent successfully");
-      } else {
-        alert("Failed to send reply");
+      return registrationCard;
+    }
+
+    // Function to handle replying to feedback
+    async function handleReplyFeedback(feedbackItem) {
+      try {
+        const userId = feedbackItem._id; // Assuming _id corresponds to userId
+        const message = prompt("Enter your message to reply:");
+
+        if (message) {
+          const response = await fetch("/replyFeedback", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId, message }),
+          });
+
+          if (response.ok) {
+            alert("Reply sent successfully");
+          } else {
+            alert("Failed to send reply");
+          }
+        }
+      } catch (error) {
+        console.error("Error replying to feedback:", error);
+        alert("An error occurred while replying to feedback");
       }
     }
-  } catch (error) {
-    console.error("Error replying to feedback:", error);
-    alert("An error occurred while replying to feedback");
-  }
-}
-
-
-
-  
-</script>
-</body>
-</html>
-
+  </script>
 </body>
 </html>

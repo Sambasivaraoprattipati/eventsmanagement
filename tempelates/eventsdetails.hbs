@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="styles.css">
     <title>Event Details</title>
     <style>
-        /* Add your CSS styles here */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('https://img.freepik.com/premium-vector/blue-stage-show-background-with-spotlights_78474-323.jpg?size=626&ext=jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -113,23 +122,27 @@
             color: #333;
         }
 
-        .register-button {
+        .register-button,
+        .feedback-button {
             margin-top: 20px;
         }
 
-        .register-button a.register-button-link {
+        .register-button a.register-button-link,
+        .feedback-button a.feedback-button-link {
             background-color: #61a0a8;
             color: #fff;
             border: none;
-            padding: 10px;
+            padding: 5px;
             font-size: 16px;
             cursor: pointer;
             border-radius: 4px;
             transition: background-color 0.3s;
-            text-decoration: none; /* Add this to remove underlines */
+            text-decoration: none;
+            margin-right: 20px;
         }
 
-        .register-button a.register-button-link:hover {
+        .register-button a.register-button-link:hover,
+        .feedback-button a.feedback-button-link:hover {
             background-color: #4b7c82;
         }
     </style>
@@ -137,8 +150,7 @@
 
 <body>
     <video autoplay muted loop>
-        <source src="https://cdn.pixabay.com/vimeo/726548063/stage-123016.mp4?width=1280&hash=c77b19ae97383d8d7982eeba99f4abec443b42f3"
-            type="video/mp4">
+        <source src="https://img.freepik.com/premium-vector/blue-stage-show-background-with-spotlights_78474-323.jpg?size=626&ext=jpg" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
@@ -148,25 +160,19 @@
     <div id="cardContainer"></div>
 
     <script>
-        // Function to navigate to event details page
         function navigateToDetails(eventId) {
             window.location.href = '/event-details.html?eventId=' + eventId;
         }
 
-        // Your JavaScript code remains unchanged
-        // Extract the encoded data from the query parameter
         const queryParams = new URLSearchParams(window.location.search);
         const encodedData = queryParams.get('data');
 
-        // Decode the data and parse it as JSON
         const jsonString = decodeURIComponent(encodedData);
         const eventData = JSON.parse(jsonString);
 
-        // Function to create and display cards
         function displayEventCards() {
             const container = document.getElementById('cardContainer');
 
-            // Loop through each event in the data and create a card
             eventData.forEach(event => {
                 const card = document.createElement('div');
                 card.classList.add('event-card');
@@ -175,7 +181,6 @@
                         <img src="${event.poster}" alt="${event.eventName}" onclick="navigateToDetails('${event._id}')">
                         <h2>${event.eventName}</h2>
                         <p>Event Type: ${event.eventType}</p>
-                        <!-- Add other properties as needed -->
                         <button onclick="toggleEventDetails('${event._id}')">Print Event Data</button>
                         <div class="event-details" id="${event._id}Details">
                             <p>Event Description : ${event.eventdescription}</p>
@@ -190,22 +195,21 @@
                             <p>Contact Coordinator : ${event.contactCoordinator}</p>
                             <p>Contact Email : ${event.contactemail}</p>
                             <div class="register-button">
-                                 <a  href="/register/${event._id}" class="register-button-link">Register</a>
+                                <a href="/register/${event._id}" class="register-button-link">Register</a>
+                            <div class="feedback-button">
+                                <a href="/feedback?eventId=${event._id}" class="feedback-button-link">Feedback</a>
                             </div>
-                        </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // Function to toggle the visibility of event details
         function toggleEventDetails(eventId) {
             const detailsDiv = document.getElementById(`${eventId}Details`);
             detailsDiv.style.display = detailsDiv.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Call the displayEventCards function when the page loads
         window.onload = displayEventCards;
     </script>
 </body>

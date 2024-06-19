@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require('fs');
 const mongoose = require("mongoose");
 const Event = require('./mongo'); // Correct import statement
 const contactCollection = require('./mongo1'); // Import the contact schema
@@ -6,11 +7,18 @@ const RegistrationCollection = require('./mongo2');
 const cors = require("cors");
 const path = require('path');
 const templatePath = path.join(__dirname, './tempelates');
+const { spawn } = require('child_process');
+const { PythonShell } = require('python-shell');
+const bodyParser = require('body-parser');
+
+ // Import your Event model
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 
 app.set('view engine', "hbs");
 app.set("views", templatePath);
@@ -18,6 +26,19 @@ app.set("views", templatePath);
 app.get("/", (req, res) => {
   res.render('homepage');
 });
+
+// Serve the feedback form
+app.get("/feedback", (req, res) => {
+  const eventId = req.query.eventId; // Get event ID from query parameters
+  res.render('feedback', { eventId }); // Render feedback form with event ID
+});
+
+
+
+app.get("/success", (req, res) => {
+  res.render('success');
+});
+
 
 app.get("/login", (req, res) => {
   const errorMessage = req.query.error === '1' ? 'Invalid credentials. Please try again.' : '';
@@ -31,6 +52,7 @@ app.get("/explore", (req, res) => {
 app.get("/register", (req, res) => {
   res.render('register');
 });
+
 
 app.get("/contact", (req, res) => {
   res.render('contactus');
@@ -48,6 +70,12 @@ app.get("/editEvent/:eventId", (req, res) => {
   const eventId = req.params.eventId;
   res.render('editevent', { eventId });
 });
+
+app.get("/analysis", (req, res) => {
+  const eventId = req.query.eventId;
+  res.render('analysis', { eventId });
+});
+
 
 
 app.get("/explore/details", (req, res) => {
@@ -70,6 +98,8 @@ app.post("/login", (req, res) => {
     res.redirect('/login?error=1');
   }
 });
+
+
 
 // Endpoint for adding events
 app.post("/events", async (req, res) => {
@@ -106,24 +136,92 @@ app.post("/events", async (req, res) => {
   }
 });
 
-// Endpoint for adding contact information
-app.post("/contactsend", async (req, res) => {
-  console.log("POST request for contact received");
+app.use(express.json());
+
+app.post('/submit-feedback', async (req, res) => {
+  const { eventId, description } = req.body;
+  console.log('API is hit');
+  let responseSent = false;
+
+  if (!description) {
+    return res.status(400).json({ error: 'Description is required' });
+  }
 
   try {
-    let newContact = new contactCollection({
-      // Adjust the fields based on your contact schema
-      Name: req.body.name,
-      Email: req.body.email,
-      Subject: req.body.subject,
-      Message:req.body.message,
-    });
-    await newContact.save();
+    const pythonProcess = spawn('python', ['predict.py']);
 
-    res.send("Data added to contact");
+    pythonProcess.stdin.write(JSON.stringify({ description }));
+    pythonProcess.stdin.end();
+
+    let pythonOutput = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      pythonOutput += data.toString();
+    });
+
+    pythonProcess.stdout.on('end', async () => {
+      if (responseSent) return; // Prevent duplicate responses
+      try {
+        const prediction = JSON.parse(pythonOutput);
+        console.log(prediction);
+
+        if (prediction.error) {
+          responseSent = true;
+          return res.status(400).json({ error: prediction.error });
+        }
+
+        const updatedEvent = await Event.findByIdAndUpdate(
+          eventId,
+          {
+            $push: {
+              Feedbacks: {
+                description,
+                predict: prediction.prediction, // Store the prediction
+                timestamp: new Date(),
+              },
+            },
+          },
+          { new: true }
+        );
+
+        if (!updatedEvent) {
+          responseSent = true;
+          return res.status(404).json({ error: 'Event not found' });
+        }
+
+        responseSent = true;
+        res.json({ message: 'Feedback submitted and event updated successfully', updatedEvent });
+      } catch (jsonError) {
+        console.error('Error parsing Python output:', jsonError);
+        if (!responseSent) {
+          responseSent = true;
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+      }
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+      if (!responseSent) {
+        responseSent = true;
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
+
+    pythonProcess.on('error', (error) => {
+      console.error('Failed to start subprocess:', error);
+      if (!responseSent) {
+        responseSent = true;
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
+
   } catch (error) {
-    console.error("Error saving contact data:", error);
-    res.status(500).send("Internal Server Error");
+    console.error('Error submitting feedback:', error);
+    if (!responseSent) {
+      responseSent = true;
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 });
 
@@ -151,21 +249,46 @@ app.post("/registersend", async (req, res) => {
   }
 });
 
+// app.get("/events/:eventType", async (req, res) => {
+//   try {
+//     const eventType = req.params.eventType;
+
+//     // Fetch data from MongoDB based on the event type
+//     const events = await Event.find({ eventType });
+
+//     // Render the 'eventsdetails' template and pass the fetched data
+//     res.json(events);
+//     res.render('eventsdetails', { events });
+//   } catch (error) {
+//     console.error("Error fetching events:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 app.get("/events/:eventType", async (req, res) => {
   try {
     const eventType = req.params.eventType;
 
-    // Fetch data from MongoDB based on the event type
     const events = await Event.find({ eventType });
 
-    // Render the 'eventsdetails' template and pass the fetched data
     res.json(events);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+app.get("/events/:eventType", async (req, res) => {
+  try {
+    const eventType = req.params.eventType;
+
+    const events = await Event.find({ eventType });
+
     res.render('eventsdetails', { events });
   } catch (error) {
     console.error("Error fetching events:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 app.get('/eventEdit/:eventId', async (req, res) => {
   try {
@@ -224,6 +347,44 @@ app.get("/eventslist", async (req, res) => {
   }
 });
 
+app.get('/feedback-percent/:id', async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const event = await Event.findById(eventId);
+    console.log('Api hit')
+    console.log(event)
+    if (!event) {
+      return res.status(404).send({ error: 'Event not found' });
+    }
+
+    const feedbackCount = event.Feedbacks.length;
+
+    if (feedbackCount === 0) {
+      return res.status(200).send({
+        positive: 0,
+        neutral: 0,
+        negative: 0
+      });
+    }
+
+    const positiveFeedback = event.Feedbacks.filter(fb => fb.predict === '1').length;
+    const neutralFeedback = event.Feedbacks.filter(fb => fb.predict === '0').length;
+    const negativeFeedback = event.Feedbacks.filter(fb => fb.predict === '-1').length;
+
+    const positivePercentage = (positiveFeedback / feedbackCount) * 100;
+    const neutralPercentage = (neutralFeedback / feedbackCount) * 100;
+    const negativePercentage = (negativeFeedback / feedbackCount) * 100;
+
+    res.status(200).send({
+      positive: positivePercentage,
+      neutral: neutralPercentage,
+      negative: negativePercentage
+    });
+  } catch (error) {
+    res.status(500).send({ error: 'Internal server error' });
+  }
+});
+
 app.delete('/deleteEvent/:eventId', async (req, res) => {
   try {
     const eventId = req.params.eventId;
@@ -240,9 +401,10 @@ app.delete('/deleteEvent/:eventId', async (req, res) => {
   }
 });
 
-app.get("/feedback", async (req, res) => {
+app.get("/allfeedback", async (req, res) => {
   try {
     // Fetch all events from MongoDB
+    console.log('hit')
     const events = await contactCollection.find({});
 
     res.json(events);
@@ -255,6 +417,26 @@ app.get("/register/:eventId", (req, res) => {
   const eventId = req.query.eventId; 
   res.render('register', { eventId }); 
   console.log(eventId);
+});
+
+app.post("/contactsend", async (req, res) => {
+  console.log("POST request for contact received");
+
+  try {
+    let newContact = new contactCollection({
+      // Adjust the fields based on your contact schema
+      Name: req.body.name,
+      Email: req.body.email,
+      Subject: req.body.subject,
+      Message:req.body.message,
+    });
+    await newContact.save();
+
+    res.send("Data added to contact");
+  } catch (error) {
+    console.error("Error saving contact data:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.post('/registers/:eventId', async (req, res) => {

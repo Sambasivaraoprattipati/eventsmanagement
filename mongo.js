@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 mongoose
-  .connect("mongodb+srv://prattipatisamba27:samba0000@cluster0.dheumcb.mongodb.net/event", {
+  //.connect("mongodb+srv://prattipatisamba27:samba0000@cluster0.dheumcb.mongodb.net/event", {
+    .connect("mongodb+srv://prattipatisamba27:samba0000@cluster0.dheumcb.mongodb.net/Feedback", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -42,6 +43,13 @@ mongoose
         yearOfStudy: { type: Number, required: true },
       },
     ],
+    Feedbacks:[
+      {
+        description: {type:String},
+        predict: {type:String},
+        timestamp: { type: Date, default: Date.now },
+      }
+    ]
   });
   
 

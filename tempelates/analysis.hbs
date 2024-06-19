@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Statistics</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 50%;
+  margin: 50px auto;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 40px;
+}
+
+canvas {
+  margin: 20px 0;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Feedback Statistics for Event</h1>
+    <canvas id="pieChart"></canvas>
+    <canvas id="barChart"></canvas>
+  </div>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Function to get the value of a query parameter
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  // Get the event ID from the URL query parameter
+  const eventId = getQueryParam('eventId'); // URL should have ?eventId=YOUR_EVENT_ID
+
+  if (!eventId) {
+    console.error('Event ID not provided in the URL.');
+    return;
+  }
+
+  const apiUrl = `http://localhost:4001/feedback-percent/${eventId}`;
+
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        console.error(data.error);
+        return;
+      }
+      console.log(data)
+
+      const positive = data.positive;
+      const neutral = data.neutral;
+      const negative = data.negative;
+
+      renderPieChart(positive, neutral, negative);
+      renderBarChart(positive, neutral, negative);
+    })
+    .catch(error => {
+      console.error('Error fetching feedback percentages:', error);
+    });
+
+  function renderPieChart(positive, neutral, negative) {
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Positive', 'Neutral', 'Negative'],
+        datasets: [{
+          data: [positive, neutral, negative],
+          backgroundColor: ['#4caf50', '#ffeb3b', '#f44336'],
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const label = context.label || '';
+                const value = context.raw;
+                return `${label}: ${value.toFixed(2)}%`;
+              }
+            }
+          }
+        }
+      },
+    });
+  }
+
+  function renderBarChart(positive, neutral, negative) {
+    const ctx = document.getElementById('barChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Positive', 'Neutral', 'Negative'],
+        datasets: [{
+          label: 'Feedback Percentage',
+          data: [positive, neutral, negative],
+          backgroundColor: ['#4caf50', '#ffeb3b', '#f44336'],
+        }],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value) {
+                return value + '%';
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const value = context.raw;
+                return `${value.toFixed(2)}%`;
+              }
+            }
+          }
+        }
+      },
+    });
+  }
+});
+</script>
+</body>
+</html>

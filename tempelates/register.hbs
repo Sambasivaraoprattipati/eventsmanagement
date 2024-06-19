@@ -45,11 +45,20 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
+        #message {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
 
-    <form id="registrationForm" method="POST" >
+    <form id="registrationForm" method="POST">
         <h2>Event Registration</h2>
 
         <label for="name">Name:</label>
@@ -81,6 +90,10 @@
         <button type="button" onclick="submitForm()">Submit</button>
     </form>
 
+    <div id="message">
+        Successfully registered for the event <span id="eventName"></span>. <a href="/">Go back to home</a>
+    </div>
+
     <script>
         function submitForm() {
             const formData = new FormData(document.getElementById('registrationForm'));
@@ -102,22 +115,26 @@
             })
             .then(response => {
                 if (response.ok) {
-                    return response.json(); // Assuming your server sends JSON response
+                    // Assuming your server sends JSON response with event name
+                    return response.json();
                 }
                 throw new Error('Network response was not ok.');
             })
             .then(result => {
-                console.log('Success:', result);
-                window.location.href = '/explore';
-                // Optionally, you can display a success message to the user
+                // Display success message and event name
+                const messageDiv = document.getElementById('message');
+                const eventNameSpan = document.getElementById('eventName');
+                eventNameSpan.textContent = result.eventName; // Update with your response data
+                messageDiv.style.display = 'block';
+
+                // Optionally, you can hide the form after successful registration
+                document.getElementById('registrationForm').style.display = 'none';
             })
             .catch(error => {
                 console.error('Error:', error);
                 // Optionally, you can display an error message to the user
             });
         }
-
-
     </script>
 
 </body>
