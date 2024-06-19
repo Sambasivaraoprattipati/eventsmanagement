@@ -222,7 +222,7 @@
         });
         // Send JSON data to the backend
         try {
-            const response = await fetch(`http://localhost:4001/updateEvent/${eventId}`, {
+            const response = await fetch(`https://eventsmanagement-1.onrender.com/updateEvent/${eventId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
