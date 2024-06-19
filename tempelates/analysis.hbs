@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
   }
 
-  const apiUrl = `http://localhost:4001/feedback-percent/${eventId}`;
+  const apiUrl = `https://eventsmanagement-1.onrender.com/feedback-percent/${eventId}`;
 
   fetch(apiUrl)
     .then(response => response.json())
