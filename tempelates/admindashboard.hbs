@@ -297,7 +297,7 @@
 
     async function fetchEvents() {
       try {
-        const response = await fetch('http://localhost:4001/eventslist');
+        const response = await fetch('https://eventsmanagement-1.onrender.com/eventslist');
         const eventData = await response.json();
         console.log(eventData);
         counts = eventData.reduce((total, event) => {
@@ -383,7 +383,7 @@
     // Function to delete event
     async function deleteEvent(eventId) {
       try {
-        const response = await fetch(`http://localhost:4001/deleteEvent/${eventId}`, {
+        const response = await fetch(`https://eventsmanagement-1.onrender.com/deleteEvent/${eventId}`, {
           method: 'DELETE'
         });
         if (response.ok) {
@@ -400,7 +400,7 @@
 
     async function fetchFeedback() {
       try {
-        const response = await fetch('http://localhost:4001/allfeedback');
+        const response = await fetch('https://eventsmanagement-1.onrender.com/allfeedback');
         const feedbackData = await response.json();
         console.log(feedbackData);
         // Call the function to update the feedback list with the fetched data
