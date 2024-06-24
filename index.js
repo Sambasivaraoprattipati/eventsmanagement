@@ -33,13 +33,6 @@ app.get("/feedback", (req, res) => {
   res.render('feedback', { eventId }); // Render feedback form with event ID
 });
 
-
-
-app.get("/success", (req, res) => {
-  res.render('success');
-});
-
-
 app.get("/login", (req, res) => {
   const errorMessage = req.query.error === '1' ? 'Invalid credentials. Please try again.' : '';
   res.render('login', { errorMessage });
@@ -190,7 +183,7 @@ app.post('/submit-feedback', async (req, res) => {
         }
 
         responseSent = true;
-        res.json({ message: 'Feedback submitted and event updated successfully', updatedEvent });
+        res.json('Your feedback has been submitted successfully. Thank you for helping us improve! We will act on your suggestions promptly.');
       } catch (jsonError) {
         console.error('Error parsing Python output:', jsonError);
         if (!responseSent) {
@@ -269,6 +262,7 @@ app.get("/events/:eventType", async (req, res) => {
     const eventType = req.params.eventType;
 
     const events = await Event.find({ eventType });
+    console.log('Api hit')
 
     res.json(events);
   } catch (error) {
@@ -276,13 +270,13 @@ app.get("/events/:eventType", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-app.get("/events/:eventType", async (req, res) => {
+app.get("/event/:eventName", async (req, res) => {
   try {
-    const eventType = req.params.eventType;
-
-    const events = await Event.find({ eventType });
-
-    res.render('eventsdetails', { events });
+    const eventName = req.params.eventName;
+    console.log('API hit for search');
+    const events = await Event.find({ eventName: { $regex: new RegExp(eventName, 'i') } }); // Using regex for case-insensitive search
+    console.log(events);
+    res.json(events);
   } catch (error) {
     console.error("Error fetching events:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -432,7 +426,7 @@ app.post("/contactsend", async (req, res) => {
     });
     await newContact.save();
 
-    res.send("Data added to contact");
+    res.send("Thank you for contacting us! We have received your message and will respond within 24 hours.");
   } catch (error) {
     console.error("Error saving contact data:", error);
     res.status(500).send("Internal Server Error");
