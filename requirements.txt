@@ -38,7 +38,6 @@ Pygments==2.17.2
 python-dateutil==2.9.0.post0
 python-pptx==0.6.23
 pytz==2024.1
-pywin32  # Do not specify version to allow pip to choose the appropriate one
 pyzmq==25.1.2
 regex==2024.5.15
 scikit-learn==1.5.0
