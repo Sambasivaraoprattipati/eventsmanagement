@@ -119,7 +119,7 @@
 
     <script>
         function fetchAndDisplayEvents(eventType) {
-            return fetch(`http://localhost:4001/events/${eventType}`)
+            return fetch(`https://eventsmanagement-1.onrender.com/events/${eventType}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -133,7 +133,7 @@
 
        function searchEventsByName(eventName) {
             console.log('in the function')
-            return fetch(`http://localhost:4001/event/${eventName}`)
+            return fetch(`https://eventsmanagement-1.onrender.com/event/${eventName}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
