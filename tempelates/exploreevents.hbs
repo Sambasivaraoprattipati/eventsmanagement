@@ -119,7 +119,21 @@
 
     <script>
         function fetchAndDisplayEvents(eventType) {
-            return fetch(`https://eventsmanagement-1.onrender.com/events/${eventType}`)
+            return fetch(`http://localhost:4001/events/${eventType}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    return data;
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    throw error;
+                });
+        }
+
+       function searchEventsByName(eventName) {
+            console.log('in the function')
+            return fetch(`http://localhost:4001/event/${eventName}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -149,27 +163,25 @@
 
         function searchEvent() {
             const searchTerm = document.getElementById('eventSearch').value.trim().toLowerCase();
-            
+            console.log('search is clicked')
             // Define event types and their mappings (if needed)
-            const eventMappings = {
-                'yearly events': 'Yearly Events',
-                'department events': 'Department Events',
-                'clubs events': 'Clubs Events',
-                'tech talks': 'Tech Talks',
-                'sport events': 'Sport Events',
-                'movie promotions': 'Movie Promotions',
-                'past events': 'Past Events'
-                // Add more as needed
-            };
-        
-            // Check if the entered search term matches any event type
-            if (searchTerm in eventMappings) {
-                const eventType = eventMappings[searchTerm];
-                eventBoxClicked(eventType);
-            } else {
-                // Handle case when no match is found
-                alert(`No events found matching '${searchTerm}'.`);
-            }
+            searchEventsByName(searchTerm)
+                .then(data => {
+                    if (data.length > 0) {
+                        const jsonString = JSON.stringify(data);
+                        // Encode the string for safe URL transmission
+                        const encodedData = encodeURIComponent(jsonString);
+
+                        // Redirect to the next page with the encoded data as a query parameter
+                        window.location.href = `/explore/details?data=${encodedData}`;
+                    } else {
+                        // Handle case when no match is found
+                        alert(`No events found matching '${searchTerm}'.`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
         }
 
     </script>
